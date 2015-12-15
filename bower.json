@@ -1,0 +1,21 @@
+{
+  "name": "thunderdomes",
+  "description": "Final WDI immersive project",
+  "main": "index.js",
+  "authors": [
+    "YOUR-USERNAME <YOUR-EMAIL-ADDRESS>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/Klaney/Thunderdomes",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-socket-io": "~0.7.0"
+  }
+}

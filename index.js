@@ -1,36 +1,47 @@
+// Require our dependencies
 var express = require('express');
-var bodyParser = require('body-parser');
-var path = require('path');
-var expressJWT = require('express-jwt');
-var jwt = require('jsonwebtoken');
-var app = express();
-var passport = require('passport');
-var FacebookStrategy = require('passport-facebook').Strategy;
-var flash = require('connect-flash');
-var http = require('http');
-var session = require('express-session');
-var mongoStore = require('connect-mongo')(session);
+		bodyParser = require('body-parser'),
+		path = require('path'),
+		expressJWT = require('express-jwt'),
+		jwt = require('jsonwebtoken'),
+		app = express(),
+		passport = require('passport'),
+		FacebookStrategy = require('passport-facebook').Strategy,
+		flash = require('connect-flash'),
+		http = require('http'),
+		session = require('express-session'),
+		mongoStore = require('connect-mongo')(session),
+		Msg = require('./models/message'),
+		mongoose = require('mongoose'),
+		User = require('./models/user'),
+		server = require('http').Server(app),
+		io = require('socket.io')(3030);
 
-var mongoose = require('mongoose');
-var User = require('./models/user');
+// Connect to MongoDB Server
 mongoose.connect('mongodb://localhost/thunderdomes');
 
+// Allow EJS files to be rendered correctly
 app.set('view engine', 'ejs');
 
+// Allow Flash messages to be displayed
 app.use(flash());
-// app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }}));
 
+// Store sessions on the Mongo server
 app.use(session({
   secret: 'my-session-store',
   store: new mongoStore({
     url: 'mongodb://localhost/thunderdomes',
     collection : 'sessions'
-  })
+  }),
+  resave: true,
+  saveUninitialized: true
 }));
 
+//Initialize passport and allow passport to save sessions
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Passport middleware to serialize user
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
@@ -40,6 +51,7 @@ passport.deserializeUser(function(id, done) {
     });
 });
 
+// Passports Facebook strategy, creating and saving a new user
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_SECRET,
@@ -70,11 +82,16 @@ passport.use(new FacebookStrategy({
 	  })
 }));
 
+//Set Express to use Angular in the directory
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'bower_components')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+
+//create an API for the users
 app.use('/api/users', require('./controllers/users'));
 
+//Facebook Authentication functionality
 app.get('/auth/facebook',
   passport.authenticate('facebook'),
   function(req, res){}
@@ -96,6 +113,7 @@ app.get('/callback/facebook', function(req, res) {
   })(req, res);
 });
 
+//Create the Auth routes within Express to login and logout
 app.get('/auth/success', function(req, res) {
 	console.log("WITHIN AUTH SUCCESS: "+req.user);
   res.render('after-auth', { state: 'success', user: req.user ? req.user : null });
@@ -111,9 +129,44 @@ app.delete('/auth', function(req, res) {
   res.end();
 });
 
+//chat messages route
+// app.get('/msg', function(req, res) {
+//   //Find
+//   Chat.find({
+//     'room': req.query.room.toLowerCase()
+//   }).exec(function(err, msgs) {
+//     //Send
+//     res.json(msgs);
+//   });
+// });
+
+//Set the rest of the routes to be defined within Angular
 app.get('/*', function(req, res){
-	console.log(req.user);
 	res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
-app.listen(process.env.PORT ||3000);
+// Socket.io functionality
+io.on('connection', function(socket){
+	//listens for message
+	console.log("User connected");
+	socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+	// socket.on('new message', function(data) {
+	// 	console.log(data);
+	//   //Create message
+	//   var newMsg = new Msg({
+	//     username: data.username,
+	//     content: data.message,
+	//     room: data.room.toLowerCase(),
+	//     created: new Date()
+	//   });
+	//   //Save it to database
+	//   newMsg.save(function(err, msg){
+	//     //Send message to those connected in the room
+	//     io.in(msg.room).emit('message created', msg);
+	//   });
+	// });
+});
+
+app.listen(process.env.PORT || 3000);

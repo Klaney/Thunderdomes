@@ -1,4 +1,4 @@
-var app = angular.module('ThunderApp',['ngRoute', 'ThunderCtrls', 'ThunderServices']);
+var app = angular.module('ThunderApp',['ngRoute', 'ThunderCtrls', 'ThunderServices', 'btford.socket-io']);
 
 // ROUTES
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
@@ -44,4 +44,23 @@ app.run(['sessionService', '$window', function (sessionService, $window) {
         sessionService.authSuccess($window.user);
     }
 }]);
+// socket.on('connect', function() {
+//   console.log('Connected!');
+// });
+
+// socket.on('message created', function (data) {
+//     //Push to new message to our $scope.messages
+//     $scope.messages.push(data);
+//     //Empty the textarea
+//     $scope.message = "";
+// });
+//Send a new message
+// $scope.send = function (msg) {
+//     //Notify the server that there is a new message with the message as packet
+//     socket.emit('new message', {
+//         room: $scope.room,
+//         message: msg,
+//         username: $scope.username
+//     });
+// };
 

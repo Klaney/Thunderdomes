@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html ng-app="ThunderApp">
+<head>
+	<base href="/">
+	<title>Thunderdomes</title>
+	<!-- Latest compiled and minified CSS & JS -->
+	<link rel="stylesheet" media="screen" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="style/style.css">
+	<!-- jQuery CDN -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<!-- Bootstrap 4 CDN -->
+    <script src="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.2/angular.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.2/angular-route.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-resource.js"></script>
+	<script src="app/services.js"></script>
+	<script src="app/controllers.js"></script>
+	<script src="app/app.js"></script>
+</head>
+
+<body>
+<script type="text/javascript">  
+    
+</script>
+
+	<div class="container">
+	<nav class="navbar navbar-dark bg-primary">
+	  <a class="navbar-brand" href="/">Welcome to the Thunderdome!</a>
+	  <ul class="nav navbar-nav">
+	    <li class="nav-item">
+	      	<a class="nav-link" href="/about">About</a>
+	    </li>
+	    <li class="nav-item">
+	      	<a class="nav-link" href="/chat">Thunderdome</a>
+	    </li>
+	    <li class="nav-item">
+	    	<button class="btn btn-primary" ng-hide="session.isLoggedIn" ng-click="session.facebookLogin()">Login</button>  
+	    </li>
+	    <li class="nav-item">
+				<div class = "nav-item" ng-show="session.isLoggedIn" ng-bind="'Hello ' + session.currentUser.name"></div>
+			</li>
+			<li class="nav-item">  
+				<button class="btn btn-primary" ng-show="session.isLoggedIn" ng-click="session.logout()">Logout</button>
+			</li>
+	    </ul>
+    </nav>
+	<ng-view></ng-view>
+  </div>
+</body>
+</html>

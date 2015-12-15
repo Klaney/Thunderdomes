@@ -1,0 +1,33 @@
+{
+  "name": "thunderdomes",
+  "version": "1.0.0",
+  "description": "Final WDI immersive project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Klaney/Thunderdomes.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Klaney/Thunderdomes/issues"
+  },
+  "homepage": "https://github.com/Klaney/Thunderdomes#readme",
+  "dependencies": {
+    "bcrypt": "^0.8.5",
+    "body-parser": "^1.14.1",
+    "connect-flash": "^0.1.1",
+    "connect-mongo": "^0.8.2",
+    "ejs": "^2.3.4",
+    "express": "^4.13.3",
+    "express-jwt": "^3.3.0",
+    "express-session": "^1.12.1",
+    "http": "0.0.0",
+    "jsonwebtoken": "^5.4.1",
+    "mongoose": "^4.2.9",
+    "path": "^0.12.7"
+  }
+}

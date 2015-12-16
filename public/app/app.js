@@ -4,14 +4,14 @@ var app = angular.module('ThunderApp',['ngRoute', 'ThunderCtrls', 'ThunderServic
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider
   .when('/', {
-    templateUrl: 'app/views/index.html',
-    controller: "MessageCtrl"
+    templateUrl: 'app/views/index.html'
   })
   .when('/about', {
     templateUrl: 'app/views/about.html'
   })
   .when('/chat', {
-    templateUrl: 'app/views/chat.html'
+    templateUrl: 'app/views/chat.html',
+    controller: "MessageCtrl"
   })
   .otherwise({
     templateUrl: 'app/views/404.html'
@@ -30,6 +30,7 @@ app.run(['$rootScope', '$window', 'sessionService', function ($rootScope, $windo
         switch (state) {
           case 'success':
             sessionService.authSuccess(user);
+            $rootScope.loggedInUser = user;
             break;
           case 'failure':
             sessionService.authFailed();
@@ -39,28 +40,35 @@ app.run(['$rootScope', '$window', 'sessionService', function ($rootScope, $windo
     }
   };
 }]);
-app.run(['sessionService', '$window', function (sessionService, $window) {  
+app.run(['sessionService', '$window', '$http', '$rootScope', function (sessionService, $window, $http, $rootScope) {  
+      console.log("YOOOOO")
+      console.log($window.user)
+      $http.get('/confirm-login')
+        .success(function (user) {
+          console.log("IN THE HTTP GET",user);
+
+          if (user) {
+            $rootScope.user = user;
+          }
+      });
+      
     if ($window.user !== null) {
         sessionService.authSuccess($window.user);
     }
 }]);
-// socket.on('connect', function() {
-//   console.log('Connected!');
-// });
+app.directive('ngEnter', function () {
+  return function (scope, element, attrs) {
+    element.bind("keydown keypress", function (event) {
+      if (event.which === 13) {
+        scope.$apply(function () {
+          scope.$eval(attrs.ngEnter);
+        });
 
-// socket.on('message created', function (data) {
-//     //Push to new message to our $scope.messages
-//     $scope.messages.push(data);
-//     //Empty the textarea
-//     $scope.message = "";
-// });
-//Send a new message
-// $scope.send = function (msg) {
-//     //Notify the server that there is a new message with the message as packet
-//     socket.emit('new message', {
-//         room: $scope.room,
-//         message: msg,
-//         username: $scope.username
-//     });
-// };
+        event.preventDefault();
+      }
+    });
+  };
+});
+
+
 

@@ -1,1 +1,18 @@
 <h1>Welcome to the Thunderdome!</h1>
+<div class="chatroom">
+	<div class="screen" id="screen">
+		<ul id="messages">
+			<li ng-repeat="message in messages">{{message.username}}:{{message.content}}</li>
+		</ul>
+	</div>
+	<div class="users" id="users">
+		<ul>
+			<li ng-repeat="user in connectedUsers">{{user.name}}</li>
+		</ul>
+	</div>
+  <form role="form" ng-enter="send(msg)">
+  	<input type="hidden" ng-model="msg.username" ng-bind="session.currentUser.name" />
+  	<input type="hidden" ng-model="msg.room" value="Thunderdome" />
+    <input id="m" autocomplete="off" ng-model="msg.content"/><button>Send</button>
+  </form>
+</div>

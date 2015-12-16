@@ -5,28 +5,75 @@ angular.module('ThunderCtrls', ["ThunderServices"])
 		'$rootScope', 
 		'$http', 
 		'sessionService', 
-		'socket', 
-		function($scope, $rootScope, $http, sessionService, socket){
-			// $scope.messages = {};
+		'socket',
+		'Messages', 
+		function(
+			$scope, 
+			$rootScope, 
+			$http, 
+			sessionService, 
+			socket,
+			Messages
+		)
+		{
+			$scope.messages = [];
+			$scope.connectedUsers = [];
 
-		 //    function loadMessages() {
-		 //      $http.get('/api/secured/message').success(function(data) {
-		 //        $scope.messages.secured = data.message || data.error;
-		 //      });
+			socket.on('message created', function (data) {
+				console.log("MESSAGE CREATED IN CONTROLLER: ", data);
+     		// Push to new message to our $scope.messages
+			    $scope.messages.push(data.newMessage);
+			    //Empty the textarea
+			    $scope.msg = "";
+			    //Update the scroll
+			    //updateScroll();
+			    setTimeout(updateScroll, 100);		    
+			});
+			socket.on('connected', function(){
+				var userData = {};
+				userData.name = $rootScope.user.name;
+				userData.image = $rootScope.user.facebook.picture.data.url;
+				$scope.connectedUsers.push(userData);
+			});
+			//$scope.currentUser = sessionService.getCurrentUser();
+			//Send a new message
+			$scope.send = function (msg) {
+				if(msg){
+					console.log("THE MSG:", msg);
+					var newMessage = new Messages();
+					newMessage.username= $rootScope.user.name;
+					newMessage.content = msg.content;
+					newMessage.room = "ThunderDome";
+					console.log("THE NEW MESSAGE:",newMessage);
+					newMessage.$save();
+			    //Notify the server that there is a new message with the message as packet
+			    socket.emit('new message', {
+			        newMessage
+			    });			
+				}
+			};
 
-		 //      $http.get('/api/message').success(function(data) {
-		 //        $scope.messages.unsecured = data.message || data.error;
-		 //      });
-		 //    }
+			Messages.query(function success(data) {
+				console.log(data);
+        $scope.messages = data;
+        }, function error(data) {
+        console.log(data);
+    	});
 
-		 //    var deregistration = $rootScope.$on('session-changed', loadMessages);
-		 //    $scope.$on('$destroy', deregistration);
+    	var out = angular.element(document.querySelector('#screen'));
+    	var isScrolledToBottom = out.context.scrollHeight - out.context.clientHeight <= out.context.scrollTop + 1;
 
-		 //    loadMessages();
 
-		 //  socket.on('connect', function() {
-		 //  	console.log('Connected!');
-			// });
+    	var updateScroll = function(){
+    		console.log("Tried to update scroll", isScrolledToBottom);
+				if(isScrolledToBottom){
+			    out.context.scrollTop = out.context.scrollHeight;
+				};
+    	}
+
+    	$scope.$watchCollection("messages", function(data, old){
+    		// setInterval(updateScroll, 100);
+    	});
 		}
 	]
 );

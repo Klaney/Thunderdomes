@@ -1,11 +1,12 @@
 var serverBaseUrl = 'http://localhost:3030';
-angular.module('ThunderServices', ['ngResource'])
+angular.module('ThunderServices', ['ngResource', 'btford.socket-io'])
 .factory('sessionService', 
   [
   '$rootScope', 
   '$window', 
   '$http',  
   function ($rootScope, $window, $http) {
+    var _currentUser = {};
     var session = {
       init: function () {
         this.resetSession();
@@ -33,11 +34,15 @@ angular.module('ThunderServices', ['ngResource'])
         console.log("IN THE SERVICES: "+userData);
         this.currentUser = userData;
         this.isLoggedIn = true;
+        _currentUser = userData;
         $rootScope.$emit('session-changed');
       },
       authFailed: function() {
         this.resetSession();
         alert('Authentication failed');
+      },
+      getCurrentUser: function() {
+        return this.currentUser;
       }
     };
     session.init();
@@ -46,13 +51,16 @@ angular.module('ThunderServices', ['ngResource'])
 .factory('Users', ['$resource', function($resource){
   return $resource('http://localhost:3000/api/users');
 }])
+.factory('Messages', ['$resource', function($resource){
+  return $resource('http://localhost:3000/api/messages');
+}])
 .factory('socket', function(socketFactory){
   var myIoSocket = io.connect(serverBaseUrl);
-  console.log("User Connected");
-  // var socket = socketFactory({
-  //     ioSocket: myIoSocket
-  // });
-  // console.log(socket);
-  return myIoSocket;
+  // console.log("User Connected");
+  var socket = socketFactory({
+      ioSocket: myIoSocket
+  });
+  console.log(socket);
+  return socket;
 });
 //END AUTH FACTORY

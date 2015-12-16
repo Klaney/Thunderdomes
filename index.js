@@ -90,6 +90,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 //create an API for the users
 app.use('/api/users', require('./controllers/users'));
+app.use('/api/messages', require('./controllers/messages'));
 
 //Facebook Authentication functionality
 app.get('/auth/facebook',
@@ -123,50 +124,35 @@ app.get('/auth/failure', function(req, res) {
   res.render('after-auth', { state: 'failure', user: null });
 });
 
+app.get('/confirm-login', function (req, res) {
+    res.send(req.user)
+  }
+);
+
 app.delete('/auth', function(req, res) {  
   req.logout();
   res.writeHead(200);
   res.end();
 });
 
-//chat messages route
-// app.get('/msg', function(req, res) {
-//   //Find
-//   Chat.find({
-//     'room': req.query.room.toLowerCase()
-//   }).exec(function(err, msgs) {
-//     //Send
-//     res.json(msgs);
-//   });
-// });
-
 //Set the rest of the routes to be defined within Angular
 app.get('/*', function(req, res){
 	res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
+
 // Socket.io functionality
 io.on('connection', function(socket){
+	io.emit('connected');
 	//listens for message
+	socket.on('new message', function(data){
+		console.log(data);
+		io.emit('message created', data)
+	});
 	console.log("User connected");
 	socket.on('disconnect', function(){
     console.log('user disconnected');
   });
-	// socket.on('new message', function(data) {
-	// 	console.log(data);
-	//   //Create message
-	//   var newMsg = new Msg({
-	//     username: data.username,
-	//     content: data.message,
-	//     room: data.room.toLowerCase(),
-	//     created: new Date()
-	//   });
-	//   //Save it to database
-	//   newMsg.save(function(err, msg){
-	//     //Send message to those connected in the room
-	//     io.in(msg.room).emit('message created', msg);
-	//   });
-	// });
 });
 
 app.listen(process.env.PORT || 3000);

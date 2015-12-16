@@ -14,7 +14,7 @@ var express = require('express');
 		Msg = require('./models/message'),
 		mongoose = require('mongoose'),
 		User = require('./models/user'),
-		server = require('http').Server(app),
+		//server = require('http').Server(app),
 		io = require('socket.io')(3030);
 
 // Connect to MongoDB Server

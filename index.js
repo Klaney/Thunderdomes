@@ -18,7 +18,7 @@ var express = require('express');
 		io = require('socket.io')(3030);
 
 // Connect to MongoDB Server
-mongoose.connect('mongodb://localhost/thunderdomes');
+mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/thunderdomes');
 
 // Allow EJS files to be rendered correctly
 app.set('view engine', 'ejs');

@@ -1,4 +1,4 @@
-var serverBaseUrl = 'http://localhost:3030';
+var serverBaseUrl = 'http://thethunderdome.herokuapp.com/:3030';
 angular.module('ThunderServices', ['ngResource', 'btford.socket-io'])
 .factory('sessionService', 
   [

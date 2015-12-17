@@ -30,7 +30,7 @@ app.use(flash());
 app.use(session({
   secret: 'my-session-store',
   store: new mongoStore({
-    url: 'mongodb://localhost/thunderdomes',
+    url: process.env.MONGOLAB_URI || 'mongodb://localhost/thunderdomes',
     collection : 'sessions'
   }),
   resave: true,

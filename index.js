@@ -55,7 +55,7 @@ passport.deserializeUser(function(id, done) {
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_SECRET,
-    callbackURL: "http://localhost:3000/callback/facebook",
+    callbackURL: "http://thethunderdome.herokuapp.com/callback/facebook",
     profileFields: ['email', 'displayName', 'picture'],
     enableProof: false
   },function(accessToken, refreshToken, profile, done) {

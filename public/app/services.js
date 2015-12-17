@@ -49,10 +49,10 @@ angular.module('ThunderServices', ['ngResource', 'btford.socket-io'])
     return session;
 }])
 .factory('Users', ['$resource', function($resource){
-  return $resource('http://localhost:3000/api/users');
+  return $resource('http://thethunderdome.herokuapp.com/api/users');
 }])
 .factory('Messages', ['$resource', function($resource){
-  return $resource('http://localhost:3000/api/messages');
+  return $resource('http://thethunderdome.herokuapp.com/api/messages');
 }])
 .factory('socket', function(socketFactory){
   var myIoSocket = io.connect(serverBaseUrl);

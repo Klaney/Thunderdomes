@@ -143,15 +143,30 @@ app.get('/*', function(req, res){
 
 // Socket.io functionality
 io.on('connection', function(socket){
+	var connectedUsers = [];
 	io.emit('connected');
 	//listens for message
 	socket.on('new message', function(data){
 		console.log(data);
 		io.emit('message created', data)
 	});
+	//listens for new connected user data
+	socket.on("connected users", function(data){
+		connectedUsers.push(data.userData.name);
+		console.log("THE CONNECTED USERS!: ",connectedUsers);
+	})
+	socket.on('disconnected name', function(name){
+		for (var i = 0; i < connectedUsers.length; i++){
+			if (connectedUsers[i] === name){
+				connectedUsers.splice([i], 1);
+			};
+		}
+		io.emit('server users', connectedUsers);
+		console.log("LIST OF CONNECTED USERS AFTER DISCONNECT: ", connectedUsers);
+	})
 	console.log("User connected");
 	socket.on('disconnect', function(){
-    console.log('user disconnected');
+    io.emit('disconnected');
   });
 });
 

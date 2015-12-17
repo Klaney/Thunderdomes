@@ -7,7 +7,7 @@
 	</div>
 	<div class="users" id="users">
 		<ul>
-			<li ng-repeat="user in connectedUsers">{{user.name}}</li>
+			<li ng-repeat="user in connectedUsers"><img src="{{user.image}}">{{user.name}}</li>
 		</ul>
 	</div>
   <form role="form" ng-enter="send(msg)">

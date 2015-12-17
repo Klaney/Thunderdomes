@@ -34,7 +34,18 @@ angular.module('ThunderCtrls', ["ThunderServices"])
 				userData.name = $rootScope.user.name;
 				userData.image = $rootScope.user.facebook.picture.data.url;
 				$scope.connectedUsers.push(userData);
+				socket.emit('connected users', {
+					userData
+				});
 			});
+			socket.on('disconnected', function(){
+				var userName = $rootScope.user.name;
+				socket.emit('disconnected name', userName);
+			});
+			socket.on('server users', function(users){
+				$scope.connectedUsers = users;
+				console.log("COMPARING SERVER USERS AND ASSIGNING TO CLIENT USERS: ",connectedUsers);
+			})
 			//$scope.currentUser = sessionService.getCurrentUser();
 			//Send a new message
 			$scope.send = function (msg) {

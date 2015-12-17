@@ -1,4 +1,5 @@
-var serverBaseUrl = 'http://thethunderdome.herokuapp.com/:3030';
+var serverBaseUrl = location.origin.replace(/^http/, "ws");
+console.log("******** "+serverBaseUrl);
 angular.module('ThunderServices', ['ngResource', 'btford.socket-io'])
 .factory('sessionService', 
   [
@@ -49,10 +50,10 @@ angular.module('ThunderServices', ['ngResource', 'btford.socket-io'])
     return session;
 }])
 .factory('Users', ['$resource', function($resource){
-  return $resource('http://thethunderdome.herokuapp.com/api/users');
+  return $resource('/api/users');
 }])
 .factory('Messages', ['$resource', function($resource){
-  return $resource('http://thethunderdome.herokuapp.com/api/messages');
+  return $resource('/api/messages');
 }])
 .factory('socket', function(socketFactory){
   var myIoSocket = io.connect(serverBaseUrl);
@@ -60,7 +61,7 @@ angular.module('ThunderServices', ['ngResource', 'btford.socket-io'])
   var socket = socketFactory({
       ioSocket: myIoSocket
   });
-  console.log(socket);
+  //console.log(socket);
   return socket;
 });
 //END AUTH FACTORY

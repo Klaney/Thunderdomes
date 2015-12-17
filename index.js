@@ -14,8 +14,10 @@ var express = require('express');
 		Msg = require('./models/message'),
 		mongoose = require('mongoose'),
 		User = require('./models/user'),
-		//server = require('http').Server(app),
-		io = require('socket.io')(3030);
+		server = require('http').createServer(app),
+		io = require('socket.io').listen(server);
+
+var port = process.env.PORT || 3000;
 
 // Connect to MongoDB Server
 mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/thunderdomes');
@@ -55,7 +57,7 @@ passport.deserializeUser(function(id, done) {
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_SECRET,
-    callbackURL: "http://thethunderdome.herokuapp.com/callback/facebook",
+    callbackURL: process.env.BASE_URL+"/callback/facebook",
     profileFields: ['email', 'displayName', 'picture'],
     enableProof: false
   },function(accessToken, refreshToken, profile, done) {
@@ -171,4 +173,5 @@ io.on('connection', function(socket){
   });
 });
 
-app.listen(process.env.PORT || 3000);
+//app.listen(port);
+server.listen(port);

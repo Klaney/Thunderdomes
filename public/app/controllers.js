@@ -47,9 +47,9 @@ angular.module('ThunderCtrls', ["ThunderServices"])
 			});
 
 			//On disconnect grab user name and send back to server
-			socket.on('disconnected', function(){
-				var userName = $rootScope.user.name;
-				socket.emit('disconnected name', userName);
+			socket.on('disconnected', function(serverArr){
+				$scope.connectedUsers = serverArr;
+				console.log("THIS SHOULD EQUAL THE SPLICED ARRAY", $scope.connectedUsers);
 			});
 
 			//server sends back updated list of who is connected

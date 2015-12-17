@@ -63,7 +63,7 @@ angular.module('ThunderCtrls', ["ThunderServices"])
 				if(msg){
 					console.log("THE MSG:", msg);
 					var newMessage = new Messages();
-					newMessage.username= /*$rootScope.user.name*/ "Keaton";
+					newMessage.username= $rootScope.user.name;
 					newMessage.content = msg.content;
 					newMessage.room = "ThunderDome";
 					console.log("THE NEW MESSAGE:",newMessage);

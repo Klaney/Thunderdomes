@@ -41,14 +41,14 @@ form button {
 	color:white;
 	margin:0;
 	padding:0;
-	border: 1px solid blue;
+	/*border: 1px solid blue;*/
 	width: 100%;
 	height: 35em;
 }
 .screen {
 	margin:0;
 	padding:0;
-	border:1px solid red;
+	/*border:1px solid red;*/
 	width: 80%;
 	height:80%;
 	overflow-y: auto;
@@ -66,4 +66,14 @@ form button {
 }
 .users li:nth-child(odd) {
 	background-color: #A0A0A0;
+}
+.navbar > ul > li > a > #userdisplay:link {
+	color: white !important;
+}
+h1#title {
+	text-align: center;
+	color:white;
+}
+input#m {
+	color:black;
 }

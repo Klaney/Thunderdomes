@@ -141,10 +141,11 @@ app.get('/*', function(req, res){
 });
 
 
+var connectedUsers = [];
 // Socket.io functionality
 io.on('connection', function(socket){
-	var connectedUsers = [];
-	io.emit('connected');
+	//emit the users on the server to the client
+	io.emit('connected', connectedUsers);
 	//listens for message
 	socket.on('new message', function(data){
 		console.log(data);

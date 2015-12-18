@@ -29,10 +29,12 @@ app.run(['$rootScope', '$window', 'sessionService', function ($rootScope, $windo
       $rootScope.$apply(function() {
         switch (state) {
           case 'success':
+            console.log("IN APPJS AUTHSTATE CHECK WAS TRUE");
             sessionService.authSuccess(user);
             $rootScope.loggedInUser = user;
             break;
           case 'failure':
+            console.log("IN APPJS AUTHSTATE CHECK WAS FALSE");
             sessionService.authFailed();
             break;
         }
@@ -41,18 +43,17 @@ app.run(['$rootScope', '$window', 'sessionService', function ($rootScope, $windo
   };
 }]);
 app.run(['sessionService', '$window', '$http', '$rootScope', function (sessionService, $window, $http, $rootScope) {  
-      console.log("YOOOOO")
+      console.log("TRYING TO GET USER")
       console.log($window.user)
       $http.get('/confirm-login')
         .success(function (user) {
           console.log("IN THE HTTP GET",user);
-
           if (user) {
             $rootScope.user = user;
           }
       });
       
-    if ($window.user !== null) {
+    if ($window.user !== undefined) {
         sessionService.authSuccess($window.user);
     }
 }]);

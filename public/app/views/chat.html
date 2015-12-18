@@ -2,7 +2,7 @@
 <div class="chatroom">
 	<div class="screen" id="screen">
 		<ul id="messages">
-			<li ng-repeat="message in messages">{{message.username}}: {{message.content}}</li>
+			<li ng-repeat="message in messages track by $index">{{message.username}}: {{message.content}}</li>
 		</ul>
 	</div>
 	<div class="users" id="users">

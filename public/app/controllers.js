@@ -31,8 +31,10 @@ angular.module('ThunderCtrls', ["ThunderServices"])
 
 			//on connection, get current users from server and other fun stuff!
 			socket.on('connected', function(data){
+				console.log("UPDATED THE CLIENT WITH THIS", data);
+				//FIRST, GET USERS ON SERVER AND UPDATE CLIENT SIDE ARR
+				$scope.connectedUsers.push(data);
 				//Create new user object to send to server
-				$scope.connectedUsers = data;
 				var userData = {};
 				userData.name = $rootScope.user.name;
 				userData.image = $rootScope.user.facebook.picture.data.url;
@@ -45,8 +47,10 @@ angular.module('ThunderCtrls', ["ThunderServices"])
 			});
 
 			socket.on('update on connect', function(users){
-				console.log("UPDATE ON CONNECT FIRED!");
-				var connectMessage = users.name + " has joined the Thunderdome!";
+				console.log("UPDATE ON CONNECT FIRED!", users[0]);
+				var connectMessage = {};
+				connectMessage.username = users[0].name;
+				connectMessage.content = "has joined the Thunderdome!";
 				$scope.messages.push(connectMessage);
 				$scope.connectedUsers = users;
 			})

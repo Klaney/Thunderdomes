@@ -13,6 +13,12 @@ form {
 	bottom: 0;
 	width: 100%;
 }
+h1 {
+	background-color:rgba(0, 0, 0, 0.5);
+	margin-bottom: 0;
+	color: white;
+	text-align: center;
+}
 form input { 
 	border: 0; 
 	padding: 10px; 
@@ -21,7 +27,7 @@ form input {
 }
 form button { 
 	width: 9%; 
-	background: rgb(130, 224, 255); 
+	background: linear-gradient(#5AE3F2, #3FA1AB); 
 	border: none; 
 	padding: 10px; 
 }
@@ -79,4 +85,9 @@ h1#title {
 }
 input#m {
 	color:black;
+}
+.about {
+	text-align: center;
+	background-color:rgba(0, 0, 0, 0.5);
+	color: white;
 }

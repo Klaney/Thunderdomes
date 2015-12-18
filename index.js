@@ -177,17 +177,11 @@ io.on('connection', function(socket){
 			//console.log("PUSHED IN when length should equal 0", newUser.id);
 			connectedUsers.push(newUser);
 		};
+		
+		io.emit("update on connect", connectedUsers);
 		console.log("THE CONNECTED USERS!: ",connectedUsers);
 	});
-	// socket.on('disconnected name', function(name){
-	// 	for (var i = 0; i < connectedUsers.length; i++){
-	// 		if (connectedUsers[i] === name){
-	// 			connectedUsers.splice([i], 1);
-	// 		};
-	// 	}
-	// 	io.emit('server users', connectedUsers);
-	// 	console.log("LIST OF CONNECTED USERS AFTER DISCONNECT: ", connectedUsers);
-	// })
+
 	console.log("User connected");
 
 	//on disconnect, splice out the user from the array based on id

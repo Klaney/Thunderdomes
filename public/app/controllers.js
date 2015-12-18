@@ -45,6 +45,9 @@ angular.module('ThunderCtrls', ["ThunderServices"])
 			});
 
 			socket.on('update on connect', function(users){
+				console.log("UPDATE ON CONNECT FIRED!");
+				var connectMessage = users.name + " has joined the Thunderdome!";
+				$scope.messages.push(connectMessage);
 				$scope.connectedUsers = users;
 			})
 

@@ -15,7 +15,8 @@ var express = require('express');
 		mongoose = require('mongoose'),
 		User = require('./models/user'),
 		server = require('http').createServer(app),
-		io = require('socket.io').listen(server);
+		io = require('socket.io').listen(server),
+		_ = require('underscore');
 
 var port = process.env.PORT || 3000;
 
@@ -146,7 +147,7 @@ app.get('/*', function(req, res){
 var connectedUsers = [];
 // Socket.io functionality
 io.on('connection', function(socket){
-	console.log("THIS IS THE SOCKET ID",socket.id);
+	//console.log("THIS IS THE SOCKET ID",socket.id);
 	//emit the users on the server to the client
 	io.emit('connected', connectedUsers);
 	//listens for message
@@ -160,7 +161,22 @@ io.on('connection', function(socket){
 		newUser.name = data.userData.name;
 		newUser.image = data.userData.image;
 		newUser.id = socket.id;
-		connectedUsers.push(newUser);
+		if (connectedUsers.length > 0){
+			var found = false;
+
+			for (var i = 0; i < connectedUsers.length; i++){
+				if(connectedUsers[i].id === newUser.id){
+					found = true;
+					break;
+				} 
+			}
+			if (!found){
+				connectedUsers.push(newUser);
+			}
+		} else if (connectedUsers.length === 0) {
+			//console.log("PUSHED IN when length should equal 0", newUser.id);
+			connectedUsers.push(newUser);
+		};
 		console.log("THE CONNECTED USERS!: ",connectedUsers);
 	});
 	// socket.on('disconnected name', function(name){
@@ -176,14 +192,14 @@ io.on('connection', function(socket){
 
 	//on disconnect, splice out the user from the array based on id
 	socket.on('disconnect', function(){
-		console.log(socket.id+" HAS DISCONNECTED")
+		//console.log(socket.id+" HAS DISCONNECTED")
 		for (var i = 0; i < connectedUsers.length; i++){
 			if (connectedUsers[i].id === socket.id){
-				console.log("THE LOOPED USERS ID", connectedUsers[i]);
+				//console.log("THE LOOPED USERS ID", connectedUsers[i]);
 				connectedUsers.splice([i], 1);
 			};
 		};
-		console.log("DISCONNECTED USER SHOULD BE SPLICED OUT", connectedUsers);
+		//console.log("DISCONNECTED USER SHOULD BE SPLICED OUT", connectedUsers);
     io.emit('disconnected', connectedUsers);
   });
 });

@@ -44,6 +44,10 @@ angular.module('ThunderCtrls', ["ThunderServices"])
 				});
 			});
 
+			socket.on('update on connect', function(users){
+				$scope.connectedUsers = users;
+			})
+
 			//On disconnect grab user name and send back to server
 			socket.on('disconnected', function(serverArr){
 				$scope.connectedUsers = serverArr;
@@ -53,7 +57,7 @@ angular.module('ThunderCtrls', ["ThunderServices"])
 			//server sends back updated list of who is connected
 			socket.on('server users', function(users){
 				$scope.connectedUsers = users;
-				console.log("COMPARING SERVER USERS AND ASSIGNING TO CLIENT USERS: ", users);
+				console.log("ASSIGNING SERVER USERS TO CLIENT USERS: ", users);
 			});
 
 			//Send a new message

@@ -36,8 +36,6 @@ angular.module('ThunderCtrls', ["ThunderServices"])
 				var userData = {};
 				userData.name = $rootScope.user.name;
 				userData.image = $rootScope.user.facebook.picture.data.url;
-				//push the user to the current users array
-				$scope.connectedUsers.push(userData);
 				//set chatbox to bottom
 				updateScroll();
 				//emit the user back to the server

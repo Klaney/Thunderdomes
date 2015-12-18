@@ -65,6 +65,7 @@ form button {
 	float:left;
 	height:80%;
 	width:20%;
+	overflow-y: auto;
 	background-color: white;
 }
 ul {

@@ -10,14 +10,6 @@
 </head>
 
 <body >
-<script type="text/javascript">
-	// var socket = io();
-
- //  socket.on('connect', function() {
- //  	console.log('Connected!');
-	// });
-</script>
-
 
 	<nav class="navbar navbar-dark">
 	  <a class="navbar-brand" href="/">Welcome to the Thunderdome!</a>
@@ -35,12 +27,14 @@
 			</li>
 	    </li>
 			<li class="nav-item">  
-				<a ng-show="session.isLoggedIn" ng-click="session.logout()">Logout</a>
+				<a class="nav-link" ng-show="session.isLoggedIn" ng-click="session.logout()">Logout</a>
 			</li>
-	    </ul>
-    </nav>
+	  </ul>
+  </nav>
 	<div class="container">
+
 		<ng-view></ng-view>
+
   </div>
   <!-- jQuery CDN -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>

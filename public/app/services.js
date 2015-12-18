@@ -10,13 +10,11 @@ angular.module('ThunderServices', ['ngResource', 'btford.socket-io'])
     var _currentUser = {};
     var session = {
       init: function () {
-        console.log("SESSION INITIATED");
         this.resetSession();
       },
       resetSession: function() {
         this.currentUser = null;
         this.isLoggedIn = false;
-        console.log("SESSION ATTEMPTED TO BE RESTARTED", this.isLoggedIn);
       },
       facebookLogin: function() {
         var url = '/auth/facebook',
@@ -34,10 +32,8 @@ angular.module('ThunderServices', ['ngResource', 'btford.socket-io'])
         });
       },
       authSuccess: function(userData) {
-        console.log("IN THE SERVICES: "+userData);
         this.currentUser = userData;
         this.isLoggedIn = true;
-        console.log("THIS.ISLOGGEDIN SHOULD BE TRUE", true);
         $rootScope.user = userData;
         $rootScope.$emit('session-changed');
       },
@@ -61,11 +57,9 @@ angular.module('ThunderServices', ['ngResource', 'btford.socket-io'])
 }])
 .factory('socket', function(socketFactory){
   var myIoSocket = io.connect(serverBaseUrl);
-  // console.log("User Connected");
   var socket = socketFactory({
       ioSocket: myIoSocket
   });
-  //console.log(socket);
   return socket;
 });
 //END AUTH FACTORY

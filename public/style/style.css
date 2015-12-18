@@ -15,7 +15,7 @@ form {
 }
 h1 {
 	background-color:rgba(0, 0, 0, 0.5);
-	margin-bottom: 0;
+	margin-top: 2%;
 	color: white;
 	text-align: center;
 }
@@ -30,6 +30,9 @@ form button {
 	background: linear-gradient(#5AE3F2, #3FA1AB); 
 	border: none; 
 	padding: 10px; 
+}
+#chattitle {
+	margin-bottom: 0;
 }
 #messages { 
 	list-style-type: none; 
@@ -91,4 +94,7 @@ input#m {
 	text-align: center;
 	background-color:rgba(0, 0, 0, 0.5);
 	color: white;
+}
+nav {
+	background-color:rgba(0, 0, 0, 0.5);
 }

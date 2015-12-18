@@ -13,7 +13,7 @@ angular.module('ThunderServices', ['ngResource', 'btford.socket-io'])
         this.resetSession();
       },
       resetSession: function() {
-        this.currentUser = null;
+        $rootScope.user = null;
         this.isLoggedIn = false;
       },
       facebookLogin: function() {
@@ -42,11 +42,24 @@ angular.module('ThunderServices', ['ngResource', 'btford.socket-io'])
         alert('Authentication failed');
       },
       getCurrentUser: function() {
-        return this.currentUser;
+        $http.get('/confirm-login')
+        .success(function (user) {
+          if (user) {
+            $rootScope.user = user;
+          }
+        });
+        console.log("THE CURRENT USER GOTTEN",user);
+        return $rootScope.user;
       }
     };
-    this.isLoggedIn = false;
-    session.init();
+    //this.isLoggedIn = false;
+    if (!session.getCurrentUser()){
+      console.log("Initialized")
+      session.init(); 
+    } else {
+      console.log("GOT THE USER")
+      this.isLoggedIn = true;
+    }
     return session;
 }])
 .factory('Users', ['$resource', function($resource){

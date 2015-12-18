@@ -48,10 +48,10 @@ angular.module('ThunderCtrls', ["ThunderServices"])
 
 			socket.on('update on connect', function(users){
 				console.log("UPDATE ON CONNECT FIRED!", users[0]);
-				var connectMessage = {};
-				connectMessage.username = users[0].name;
-				connectMessage.content = "has joined the Thunderdome!";
-				$scope.messages.push(connectMessage);
+				// var connectMessage = {};
+				// connectMessage.username = users[0].name;
+				// connectMessage.content = "has joined the Thunderdome!";
+				// $scope.messages.push(connectMessage);
 				$scope.connectedUsers = users;
 			})
 

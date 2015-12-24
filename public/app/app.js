@@ -43,19 +43,18 @@ app.run(['$rootScope', '$window', 'sessionService', function ($rootScope, $windo
   };
 }]);
 app.run(['sessionService', '$window', '$http', '$rootScope', function (sessionService, $window, $http, $rootScope) {  
-      console.log("TRYING TO GET USER")
-      console.log($window.user)
-      $http.get('/confirm-login')
-        .success(function (user) {
-          console.log("IN THE HTTP GET",user);
-          if (user) {
-            $rootScope.user = user;
-          }
-      });
-      
-    if ($window.user !== undefined) {
-        sessionService.authSuccess($window.user);
+  // console.log("TRYING TO GET USER")
+  // console.log($window.user)
+  $http.get('/confirm-login')
+  .success(function (user) {
+    console.log("IN THE HTTP GET",user);
+    if (user) {
+      $rootScope.user = user;
     }
+  });     
+  if ($window.user !== undefined) {
+    sessionService.authSuccess($window.user);
+  }
 }]);
 app.directive('ngEnter', function () {
   return function (scope, element, attrs) {
@@ -64,7 +63,6 @@ app.directive('ngEnter', function () {
         scope.$apply(function () {
           scope.$eval(attrs.ngEnter);
         });
-
         event.preventDefault();
       }
     });

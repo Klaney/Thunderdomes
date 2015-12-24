@@ -16,6 +16,7 @@ var express = require('express');
 		User = require('./models/user'),
 		server = require('http').createServer(app),
 		io = require('socket.io').listen(server),
+		tether = require('tether'),
 		_ = require('underscore');
 
 var port = process.env.PORT || 3000;

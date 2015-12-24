@@ -48,7 +48,7 @@ angular.module('ThunderServices', ['ngResource', 'btford.socket-io'])
             $rootScope.user = user;
           }
         });
-        console.log("THE CURRENT USER GOTTEN",user);
+        //console.log("THE CURRENT USER GOTTEN",user);
         return $rootScope.user;
       }
     };

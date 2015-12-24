@@ -87,21 +87,21 @@ angular.module('ThunderCtrls', ["ThunderServices"])
 			//Get the messages from the database for each connection
 			Messages.query(function success(data) {
 				console.log(data);
-        $scope.messages = data;
-        }, function error(data) {
-        console.log(data);
-    	});
+		        $scope.messages = data;
+	        }, function error(data) {
+		        console.log(data);
+	    	});
 
-    	var out = angular.element(document.querySelector('#screen'));
-    	var isScrolledToBottom = out.context.scrollHeight - out.context.clientHeight <= out.context.scrollTop + 1;
+    		var out = angular.element(document.querySelector('#screen'));
+    		var isScrolledToBottom = out.context.scrollHeight - out.context.clientHeight <= out.context.scrollTop + 1;
 
-    	//function to go to bottom of chatbox
-    	var updateScroll = function(){
-    		console.log("Tried to update scroll", isScrolledToBottom);
+    		//function to go to bottom of chatbox
+    		var updateScroll = function(){
+    			console.log("Tried to update scroll", isScrolledToBottom);
 				if(isScrolledToBottom){
-			    out.context.scrollTop = out.context.scrollHeight;
+		    		out.context.scrollTop = out.context.scrollHeight;
 				};
-    	}
+    		}
 		}
 	]
 );

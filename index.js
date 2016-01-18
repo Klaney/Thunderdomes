@@ -1,23 +1,23 @@
 // Require our dependencies
 var express = require('express');
-		bodyParser = require('body-parser'),
-		path = require('path'),
-		expressJWT = require('express-jwt'),
-		jwt = require('jsonwebtoken'),
-		app = express(),
-		passport = require('passport'),
-		FacebookStrategy = require('passport-facebook').Strategy,
-		flash = require('connect-flash'),
-		http = require('http'),
-		session = require('express-session'),
-		mongoStore = require('connect-mongo')(session),
-		Msg = require('./models/message'),
-		mongoose = require('mongoose'),
-		User = require('./models/user'),
-		server = require('http').createServer(app),
-		io = require('socket.io').listen(server),
-		tether = require('tether'),
-		_ = require('underscore');
+	bodyParser = require('body-parser'),
+	path = require('path'),
+	expressJWT = require('express-jwt'),
+	jwt = require('jsonwebtoken'),
+	app = express(),
+	passport = require('passport'),
+	FacebookStrategy = require('passport-facebook').Strategy,
+	flash = require('connect-flash'),
+	http = require('http'),
+	session = require('express-session'),
+	mongoStore = require('connect-mongo')(session),
+	Msg = require('./models/message'),
+	mongoose = require('mongoose'),
+	User = require('./models/user'),
+	server = require('http').createServer(app),
+	io = require('socket.io').listen(server),
+	tether = require('tether'),
+	_ = require('underscore');
 
 var port = process.env.PORT || 3000;
 
@@ -50,40 +50,42 @@ passport.serializeUser(function(user, done) {
   done(null, user);
 });
 passport.deserializeUser(function(id, done) {  
-    User.findOne({ _id: id }, function (err, user) {
-        done(err, user);
-    });
+  User.findOne({ _id: id }, function (err, user) {
+    done(err, user);
+  });
 });
 
 // Passports Facebook strategy, creating and saving a new user
 passport.use(new FacebookStrategy({
-    clientID: process.env.FACEBOOK_APP_ID,
-    clientSecret: process.env.FACEBOOK_SECRET,
-    callbackURL: process.env.BASE_URL+"/callback/facebook",
-    profileFields: ['email', 'displayName', 'picture'],
-    enableProof: false
-  },function(accessToken, refreshToken, profile, done) {
-	  User.findOne({ 'facebook.id': profile.id }, function (err, user) {
-	    if (err) { return done(err); }
-	    if (!user) {
-	      user = new User({
-	        name: profile.displayName,
-	        user_image: profile.picture,
-	        username: profile.username,
-	        provider_id: profile.id,
-	        provider: 'facebook',
-	        facebook: profile._json
-	      });
-	      user.save(function (err) {
-	        if (err) {
-	            console.log(err);
-	        }
-	        return done(err, user);
-	      });
-	    } else {
-	      return done(err, user);
-	    }
-	  })
+  clientID: process.env.FACEBOOK_APP_ID,
+  clientSecret: process.env.FACEBOOK_SECRET,
+  callbackURL: process.env.BASE_URL+"/callback/facebook",
+  profileFields: ['email', 'displayName', 'picture'],
+  enableProof: false
+},function(accessToken, refreshToken, profile, done) {
+  User.findOne({ 'facebook.id': profile.id }, function (err, user) {
+    if (err) { 
+    	return done(err) 
+    };
+    if (!user) {
+      user = new User({
+        name: profile.displayName,
+        user_image: profile.picture,
+        username: profile.username,
+        provider_id: profile.id,
+        provider: 'facebook',
+        facebook: profile._json
+      });
+      user.save(function (err) {
+        if (err) {
+          console.log(err);
+        }
+        return done(err, user);
+      });
+    } else {
+      return done(err, user);
+    }
+  })
 }));
 
 //Set Express to use Angular in the directory
@@ -92,7 +94,7 @@ app.use(express.static(path.join(__dirname, 'bower_components')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-//create an API for the users
+//create an API for the users and messages
 app.use('/api/users', require('./controllers/users'));
 app.use('/api/messages', require('./controllers/messages'));
 
@@ -144,18 +146,20 @@ app.get('/*', function(req, res){
 	res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
-
+// Array of users connected to the server
 var connectedUsers = [];
+
 // Socket.io functionality
 io.on('connection', function(socket){
-	//console.log("THIS IS THE SOCKET ID",socket.id);
+	
 	//emit the users on the server to the client
 	io.emit('connected', connectedUsers);
+
 	//listens for message
 	socket.on('new message', function(data){
-		console.log(data);
 		io.emit('message created', data)
 	});
+
 	//listens for new connected user data
 	socket.on("connected users", function(data){
 		var newUser = {};
@@ -175,29 +179,21 @@ io.on('connection', function(socket){
 				connectedUsers.push(newUser);
 			}
 		} else if (connectedUsers.length === 0) {
-			//console.log("PUSHED IN when length should equal 0", newUser.id);
 			connectedUsers.push(newUser);
 		};
-		
 		io.emit("update on connect", connectedUsers);
 		console.log("THE CONNECTED USERS!: ",connectedUsers);
 	});
 
-	console.log("User connected");
-
 	//on disconnect, splice out the user from the array based on id
 	socket.on('disconnect', function(){
-		//console.log(socket.id+" HAS DISCONNECTED")
 		for (var i = 0; i < connectedUsers.length; i++){
 			if (connectedUsers[i].id === socket.id){
-				//console.log("THE LOOPED USERS ID", connectedUsers[i]);
 				connectedUsers.splice([i], 1);
 			};
 		};
-		//console.log("DISCONNECTED USER SHOULD BE SPLICED OUT", connectedUsers);
     io.emit('disconnected', connectedUsers);
   });
 });
 
-//app.listen(port);
 server.listen(port);

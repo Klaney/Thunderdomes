@@ -1,5 +1,5 @@
 // Require our dependencies
-var express = require('express');
+var express = require('express'),
 	bodyParser = require('body-parser'),
 	path = require('path'),
 	expressJWT = require('express-jwt'),
